@@ -65,19 +65,19 @@ record Reality01 {o h : Level}
 
     PreThingsₘ⊶PrePlaceᵥ : Hetₘᵥ[ PreThingsₘ , PrePlaceᵥ ]  
 
-  record MovementFunctorᵥ : Type (o ⊔ h) where
-    constructor movementFunctorᵥ
+  record PrePlaceFunctorᵥ : Type (o ⊔ h) where
+    constructor prePlaceFunctor
     pattern
     field
       Fᵥ : Functor Cᵥ Cᵥ
       Fᵥ⟅Uᵥ⟆≡PrePlaceᵥ : Fᵥ ⟅ Uᵥ ⟆ ≡ PrePlaceᵥ
 
-  open MovementFunctorᵥ
+  open PrePlaceFunctorᵥ
 
   Property = Type h
 
-  isMovementAtUniverseTransitionᵥ : MovementFunctorᵥ → Homᵥ[ Uᵥ , Uᵥ ] → Property
-  isMovementAtUniverseTransitionᵥ (movementFunctorᵥ Fᵥ Fᵥ⟅Uᵥ⟆≡PrePlaceᵥ) universeTransitionᵥ =
+  isMovementAtUniverseTransitionᵥ : PrePlaceFunctorᵥ → Homᵥ[ Uᵥ , Uᵥ ] → Property
+  isMovementAtUniverseTransitionᵥ (prePlaceFunctor Fᵥ Fᵥ⟅Uᵥ⟆≡PrePlaceᵥ) universeTransitionᵥ =
     let prePlaceTransitionᵥ = prePlaceFunctorᵥ ⟪ universeTransitionᵥ ⟫  
         preThingsTransitionᵥₘ = preThingsFunctorᵥₘ ⟪ universeTransitionᵥ ⟫
         preThingsTransitionₘ : Homₘ[ PreThingsᵥₘ≡PreThingsₘ i1 , PreThingsᵥₘ≡PreThingsₘ i1 ]
@@ -100,7 +100,7 @@ record Reality01 {o h : Level}
 
   isImmobileAtUniverseTransitionᵥ : Homᵥ[ Uᵥ , Uᵥ ] → Property
   isImmobileAtUniverseTransitionᵥ =
-    isMovementAtUniverseTransitionᵥ (movementFunctorᵥ (Constant Cᵥ Cᵥ PrePlaceᵥ) refl)
+    isMovementAtUniverseTransitionᵥ (prePlaceFunctor (Constant Cᵥ Cᵥ PrePlaceᵥ) refl)
 
 -----------------------------------------------------------------------------------------------
 

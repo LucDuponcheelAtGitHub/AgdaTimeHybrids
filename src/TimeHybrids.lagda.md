@@ -306,20 +306,20 @@ operation synonyms are introduced in order to be able to associate precedences w
 We are ready to characterize *movement of pre-thing collections* in a dynamic universe and
 corresponding universe pre-places setting. 
 
-### `MovementFunctorᵥ`
+### `PrePlaceFunctorᵥ`
 
-- `MovementFunctorᵥ` specifies a virtual universe category functor `Fᵥ` that requires 
+- `PrePlaceFunctorᵥ` specifies a virtual universe category functor `Fᵥ` that requires 
    equality of `Fᵥ ⟅ Uᵥ ⟆` with `PrePlaceᵥ` at `ob` level.
 
 ```agda
-  record MovementFunctorᵥ : Type (o ⊔ h) where
-    constructor movementFunctorᵥ
+  record PrePlaceFunctorᵥ : Type (o ⊔ h) where
+    constructor prePlaceFunctor
     pattern
     field
       Fᵥ : Functor Cᵥ Cᵥ
       Fᵥ⟅Uᵥ⟆≡PrePlaceᵥ : Fᵥ ⟅ Uᵥ ⟆ ≡ PrePlaceᵥ
 
-  open MovementFunctorᵥ
+  open PrePlaceFunctorᵥ
 ```
 
 ### `isMovementAtUniverseTransitionᵥ`
@@ -328,7 +328,7 @@ First we define a convenient local synonym `Property`. Note that the type univer
 has been declared as an implicit `Level` typed parameter of `Reality01`. So it is a property
 at homomorphism type universe level.
 
-`isMovementAtUniverseTransitionᵥ` characterizes movement functorially as a `MovementFunctorᵥ`
+`isMovementAtUniverseTransitionᵥ` characterizes movement functorially as a `PrePlaceFunctorᵥ`
 so that `movementTransitionᵥ`, defined in terms of it, equals `lhs` and `rhs` where
 
 - `lhs` is the result of the left action of pre-thing collection transitions upon pre-thing
@@ -346,8 +346,8 @@ by
 ```agda
   Property = Type h
 
-  isMovementAtUniverseTransitionᵥ : MovementFunctorᵥ → Homᵥ[ Uᵥ , Uᵥ ] → Property
-  isMovementAtUniverseTransitionᵥ (movementFunctorᵥ Fᵥ Fᵥ⟅Uᵥ⟆≡PrePlaceᵥ) universeTransitionᵥ =
+  isMovementAtUniverseTransitionᵥ : PrePlaceFunctorᵥ → Homᵥ[ Uᵥ , Uᵥ ] → Property
+  isMovementAtUniverseTransitionᵥ (prePlaceFunctor Fᵥ Fᵥ⟅Uᵥ⟆≡PrePlaceᵥ) universeTransitionᵥ =
     let prePlaceTransitionᵥ = prePlaceFunctorᵥ ⟪ universeTransitionᵥ ⟫  
         preThingsTransitionᵥₘ = preThingsFunctorᵥₘ ⟪ universeTransitionᵥ ⟫
         preThingsTransitionₘ : Homₘ[ PreThingsᵥₘ≡PreThingsₘ i1 , PreThingsᵥₘ≡PreThingsₘ i1 ]
@@ -386,7 +386,7 @@ functor `Constant Cᵥ Cᵥ PrePlaceᵥ` that *definitionally* (using `refl` evi
 
   isImmobileAtUniverseTransitionᵥ : Homᵥ[ Uᵥ , Uᵥ ] → Property
   isImmobileAtUniverseTransitionᵥ =
-    isMovementAtUniverseTransitionᵥ (movementFunctorᵥ (Constant Cᵥ Cᵥ PrePlaceᵥ) refl)
+    isMovementAtUniverseTransitionᵥ (prePlaceFunctor (Constant Cᵥ Cᵥ PrePlaceᵥ) refl)
 ```
 
 
