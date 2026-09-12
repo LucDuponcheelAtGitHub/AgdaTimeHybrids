@@ -92,8 +92,9 @@ record Reality01 {o h : Level}
             (λ (i : I) → Homᵥ[ Fᵥ⟅Uᵥ⟆≡PrePlaceᵥ i , Fᵥ⟅Uᵥ⟆≡PrePlaceᵥ i ])
             i0
             (Fᵥ ⟪ universeTransitionᵥ ⟫)
-    in preThingsTransitionₘ ₗ∘ PreThingsₘ⊶PrePlaceᵥ ∙ᵣ movementTransitionᵥ ≡
-       PreThingsₘ⊶PrePlaceᵥ ∙ᵣ prePlaceTransitionᵥ
+        lhs = preThingsTransitionₘ ₗ∘ PreThingsₘ⊶PrePlaceᵥ
+        rhs = PreThingsₘ⊶PrePlaceᵥ ∙ᵣ prePlaceTransitionᵥ
+    in lhs ∙ᵣ movementTransitionᵥ ≡ rhs
 
   open import Cubical.Categories.Functors.Constant
 
