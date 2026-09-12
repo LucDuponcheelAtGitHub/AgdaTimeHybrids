@@ -303,7 +303,7 @@ operation synonyms are introduced in order to be able to associate precedences w
 
 ## Movement
 
-We are ready to characterise *movement of pre-thing collections* in a dynamic universe and
+We are ready to characterize *movement of pre-thing collections* in a dynamic universe and
 corresponding universe pre-places setting. 
 
 ### `MovementFunctorᵥ`
@@ -328,7 +328,7 @@ First we define a convenient local synonym `Property`. Note that the type univer
 has been declared as an implicit `Level` typed parameter of `Reality01`. So it is a property
 at homomorphism type universe level.
 
-`isMovementAtUniverseTransitionᵥ` characterises movement functorially as a `MovementFunctorᵥ`
+`isMovementAtUniverseTransitionᵥ` characterizes movement functorially as a `MovementFunctorᵥ`
 so that `movementTransitionᵥ`, defined in terms of it, equals `lhs` and `rhs` where
 
 - `lhs` is the result of the left action of pre-thing collection transitions upon pre-thing
