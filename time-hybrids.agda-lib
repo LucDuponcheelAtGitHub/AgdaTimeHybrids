@@ -1,0 +1,3 @@
+name: time-hybrids
+include: src
+depend: standard-library agda-categories cubical
