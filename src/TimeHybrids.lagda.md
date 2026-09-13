@@ -348,26 +348,28 @@ by
 
   isMovementAtUniverseTransitionᵥ : PrePlaceFunctorᵥ → Homᵥ[ Uᵥ , Uᵥ ] → Property
   isMovementAtUniverseTransitionᵥ (prePlaceFunctor Fᵥ Fᵥ⟅Uᵥ⟆≡PrePlaceᵥ) universeTransitionᵥ =
-    let prePlaceTransitionᵥ = prePlaceFunctorᵥ ⟪ universeTransitionᵥ ⟫  
-        preThingsTransitionᵥₘ = preThingsFunctorᵥₘ ⟪ universeTransitionᵥ ⟫
-        preThingsTransitionₘ : Homₘ[ PreThingsᵥₘ≡PreThingsₘ i1 , PreThingsᵥₘ≡PreThingsₘ i1 ]
-        preThingsTransitionₘ =
-          transp 
-            (λ (i : I) → Homₘ[ PreThingsᵥₘ≡PreThingsₘ i , PreThingsᵥₘ≡PreThingsₘ i ])
-            i0
-            preThingsTransitionᵥₘ
-        movementTransitionᵥ : Homᵥ[ Fᵥ⟅Uᵥ⟆≡PrePlaceᵥ i1 , Fᵥ⟅Uᵥ⟆≡PrePlaceᵥ i1 ]
-        movementTransitionᵥ =
-          transp
-            (λ (i : I) → Homᵥ[ Fᵥ⟅Uᵥ⟆≡PrePlaceᵥ i , Fᵥ⟅Uᵥ⟆≡PrePlaceᵥ i ])
-            i0
-            (Fᵥ ⟪ universeTransitionᵥ ⟫)
-        lhs = preThingsTransitionₘ ₗ∘ PreThingsₘ⊶PrePlaceᵥ
-        rhs = PreThingsₘ⊶PrePlaceᵥ ∙ᵣ prePlaceTransitionᵥ
-    in lhs ∙ᵣ movementTransitionᵥ ≡ rhs
+    let 
+      prePlaceTransitionᵥ = prePlaceFunctorᵥ ⟪ universeTransitionᵥ ⟫  
+      preThingsTransitionᵥₘ = preThingsFunctorᵥₘ ⟪ universeTransitionᵥ ⟫
+      preThingsTransitionₘ : Homₘ[ PreThingsᵥₘ≡PreThingsₘ i1 , PreThingsᵥₘ≡PreThingsₘ i1 ]
+      preThingsTransitionₘ =
+        transp 
+          (λ (i : I) → Homₘ[ PreThingsᵥₘ≡PreThingsₘ i , PreThingsᵥₘ≡PreThingsₘ i ])
+          i0
+          preThingsTransitionᵥₘ
+      movementTransitionᵥ : Homᵥ[ Fᵥ⟅Uᵥ⟆≡PrePlaceᵥ i1 , Fᵥ⟅Uᵥ⟆≡PrePlaceᵥ i1 ]
+      movementTransitionᵥ =
+        transp
+          (λ (i : I) → Homᵥ[ Fᵥ⟅Uᵥ⟆≡PrePlaceᵥ i , Fᵥ⟅Uᵥ⟆≡PrePlaceᵥ i ])
+          i0
+          (Fᵥ ⟪ universeTransitionᵥ ⟫)
+      lhs = preThingsTransitionₘ ₗ∘ PreThingsₘ⊶PrePlaceᵥ
+      rhs = PreThingsₘ⊶PrePlaceᵥ ∙ᵣ prePlaceTransitionᵥ
+    in 
+      lhs ∙ᵣ movementTransitionᵥ ≡ rhs
 ```
 
-Note how naturally Homotopy Type Theory deals with defining
+Note how naturally HoTT deals with defining
 
 - pre-thing collection transition equality in terms of pre-thing collection equality.
 
@@ -375,9 +377,10 @@ and
 
 - movement transitions in terms of `Fᵥ⟅Uᵥ⟆` and `PrePlaceᵥ` equality at the `ob` level.
 
-### `isImmobileAtUniverseTransitionᵥ`
+The encoding of `preThingsTransitionₘ` and `movementTransitionᵥ` is somewhat verbose. This has
+been done on purpose to make the formalization of the statements above more apparent.
 
-Characterising *immobility* is now also easy and simple by using a *constant* virtual pre-place
+Characterizing *immobility* is now also easy and simple by using a *constant* virtual pre-place
 functor `Constant Cᵥ Cᵥ PrePlaceᵥ` that *definitionally* (using `refl` evidence), deals with
 `PrePlaceᵥ`s at the `ob` level. 
 
@@ -387,6 +390,122 @@ functor `Constant Cᵥ Cᵥ PrePlaceᵥ` that *definitionally* (using `refl` evi
   isImmobileAtUniverseTransitionᵥ : Homᵥ[ Uᵥ , Uᵥ ] → Property
   isImmobileAtUniverseTransitionᵥ =
     isMovementAtUniverseTransitionᵥ (prePlaceFunctor (Constant Cᵥ Cᵥ PrePlaceᵥ) refl)
+```
+
+## The `Reality02` specification
+
+The specification `record Reality02` builds upon the specification `record Reality01` adding
+the following mathematical abstractions.
+
+- **Terminals**: The material universe, is now modeled as a category with *terminal* objects in
+  order to state material universe properties in a pointfree way.
+
+Again we leverage standard libraries to keep `field` declarations and corresponding definitions
+`Cubical Agda` idiomatic.
+
+- Terminals from `Cubical.Categories.Limits.Terminal`.
+
+```agda
+open import Cubical.Categories.Limits.Terminal
+```
+
+### `record Reality02`
+
+```agda
+record Reality02 {o h : Level}
+    (Cᵥ : Category o h)
+    (Cₘ : Category o h)
+    (PFₘᵥ : Profunctor⊶ o h Cₘ Cᵥ)
+    (CFₘ : Functor Cₘ Cₘ)
+    (Uᵥ : Category.ob Cᵥ)
+    (Pₘ : Category.ob Cₘ) :  
+  Type (lsuc (o ⊔ h)) where
+
+  open Category Cₘ renaming (ob to obₘ; id to idₘ; _∘_ to _∘ₘ_)
+```
+
+### `reality01` and `terminalₘ` `field` declarations
+
+`reality01` is a `field` that can be used to access the `field` declarations and definitions of
+`Reality01` by opening it using `open Reality01 reality01 public`. 
+
+`terminalₘ` is a `field` that can be used to access the `field` declarations and definitions of
+`Terminal`.
+
+`1ₘ` ia a convenient notation for the *terminal object* of the material universe. Note that I
+wrote "the" instead of "a". It is a well known fact that all terminal objects are equivalent.
+
+```agda
+  field
+    reality01 : Reality01 Cᵥ Cₘ PFₘᵥ CFₘ Uᵥ Pₘ
+
+    terminalₘ : Terminal Cₘ
+
+  open Reality01 reality01 public
+
+  1ₘ : obₘ
+  1ₘ = terminalOb Cₘ terminalₘ
+```
+
+### `PreInteractionₘ` definition
+
+A *pre-interaction* is a pre-thing collection of interacting pre-things.
+
+Recall that I use the short name `PreThingsₘ` (appending an `s` to `PreThing`). I hope that
+this does not lead to any confusion. You may not have noticed, but, in the previous paragraph I
+used "pre-things" as the plural of pre-thing.
+
+```agda    
+  PreInteractionₘ : obₘ
+  PreInteractionₘ = PreThingsₘ 
+```
+
+### `isGlobalPreInteractionₘ` declaration
+
+Not all pre-thing collections are pre-thing collections of interacting pre-things. We declare
+`field` `isGlobalPreInteractionₘ` , a property to make the distinction. It is formulated in
+terms of global values (elements), a commmon name for values (elements) of type
+`Homₘ[ 1ₘ , Z ]` for some `Z` (in this case `PreThingsₘ`).
+
+```agda
+  field 
+
+    isGlobalPreInteractionₘ : Homₘ[ 1ₘ , PreThingsₘ ] → Property 
+```
+
+## `PreInteractionₘ` preservation
+
+We are ready to formulate that virtual universe transitions, and corresponding material
+pre-thing collection transitions respect the dichotomy between pre-interactions and other
+pre-thing collections. First we define left-to-right composition of material homomorphisms.
+Preferring to read from left to right is a matter of taste. 
+
+```agda
+  _⋙ₘ_ : ∀ {Z Y X : obₘ} → Homₘ[ Z , Y ] → Homₘ[ Y , X ] → Homₘ[ Z , X ]
+  f ⋙ₘ g = g ∘ₘ f
+
+  infixl 8 _⋙ₘ_
+```
+
+The dichotomy respectation property is defined as below as
+`preThingCollectionIsPreInteractionPreservation`.
+
+Note, again, how naturally HoTT deals with defining pre-thing collection transition equality in
+terms of pre-thing collection equality. This time the encoding is less verbose.
+
+```agda
+  preThingCollectionIsPreInteractionPreservation : Property
+  preThingCollectionIsPreInteractionPreservation =
+    ∀ (universeTransitionᵥ : Homᵥ[ Uᵥ , Uᵥ ]) 
+      (globalPreThingsₘ : Homₘ[ 1ₘ , PreThingsₘ ])
+    → let 
+        preThingsTransitionₘ =
+          transport
+            (λ i → Homₘ[ PreThingsᵥₘ≡PreThingsₘ i , PreThingsᵥₘ≡PreThingsₘ i ])
+            (preThingsFunctorᵥₘ ⟪ universeTransitionᵥ ⟫)
+      in 
+        isGlobalPreInteractionₘ globalPreThingsₘ 
+        → isGlobalPreInteractionₘ (globalPreThingsₘ ⋙ₘ preThingsTransitionₘ)
 ```
 
 

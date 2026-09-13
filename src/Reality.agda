@@ -78,23 +78,25 @@ record Reality01 {o h : Level}
 
   isMovementAtUniverseTransitionᵥ : PrePlaceFunctorᵥ → Homᵥ[ Uᵥ , Uᵥ ] → Property
   isMovementAtUniverseTransitionᵥ (prePlaceFunctor Fᵥ Fᵥ⟅Uᵥ⟆≡PrePlaceᵥ) universeTransitionᵥ =
-    let prePlaceTransitionᵥ = prePlaceFunctorᵥ ⟪ universeTransitionᵥ ⟫  
-        preThingsTransitionᵥₘ = preThingsFunctorᵥₘ ⟪ universeTransitionᵥ ⟫
-        preThingsTransitionₘ : Homₘ[ PreThingsᵥₘ≡PreThingsₘ i1 , PreThingsᵥₘ≡PreThingsₘ i1 ]
-        preThingsTransitionₘ =
-          transp 
-            (λ (i : I) → Homₘ[ PreThingsᵥₘ≡PreThingsₘ i , PreThingsᵥₘ≡PreThingsₘ i ])
-            i0
-            preThingsTransitionᵥₘ
-        movementTransitionᵥ : Homᵥ[ Fᵥ⟅Uᵥ⟆≡PrePlaceᵥ i1 , Fᵥ⟅Uᵥ⟆≡PrePlaceᵥ i1 ]
-        movementTransitionᵥ =
-          transp
-            (λ (i : I) → Homᵥ[ Fᵥ⟅Uᵥ⟆≡PrePlaceᵥ i , Fᵥ⟅Uᵥ⟆≡PrePlaceᵥ i ])
-            i0
-            (Fᵥ ⟪ universeTransitionᵥ ⟫)
-        lhs = preThingsTransitionₘ ₗ∘ PreThingsₘ⊶PrePlaceᵥ
-        rhs = PreThingsₘ⊶PrePlaceᵥ ∙ᵣ prePlaceTransitionᵥ
-    in lhs ∙ᵣ movementTransitionᵥ ≡ rhs
+    let 
+      prePlaceTransitionᵥ = prePlaceFunctorᵥ ⟪ universeTransitionᵥ ⟫  
+      preThingsTransitionᵥₘ = preThingsFunctorᵥₘ ⟪ universeTransitionᵥ ⟫
+      preThingsTransitionₘ : Homₘ[ PreThingsᵥₘ≡PreThingsₘ i1 , PreThingsᵥₘ≡PreThingsₘ i1 ]
+      preThingsTransitionₘ =
+        transp 
+          (λ (i : I) → Homₘ[ PreThingsᵥₘ≡PreThingsₘ i , PreThingsᵥₘ≡PreThingsₘ i ])
+          i0
+          preThingsTransitionᵥₘ
+      movementTransitionᵥ : Homᵥ[ Fᵥ⟅Uᵥ⟆≡PrePlaceᵥ i1 , Fᵥ⟅Uᵥ⟆≡PrePlaceᵥ i1 ]
+      movementTransitionᵥ =
+        transp
+          (λ (i : I) → Homᵥ[ Fᵥ⟅Uᵥ⟆≡PrePlaceᵥ i , Fᵥ⟅Uᵥ⟆≡PrePlaceᵥ i ])
+          i0
+          (Fᵥ ⟪ universeTransitionᵥ ⟫)
+      lhs = preThingsTransitionₘ ₗ∘ PreThingsₘ⊶PrePlaceᵥ
+      rhs = PreThingsₘ⊶PrePlaceᵥ ∙ᵣ prePlaceTransitionᵥ
+    in 
+      lhs ∙ᵣ movementTransitionᵥ ≡ rhs
 
   open import Cubical.Categories.Functors.Constant
 
@@ -102,6 +104,57 @@ record Reality01 {o h : Level}
   isImmobileAtUniverseTransitionᵥ =
     isMovementAtUniverseTransitionᵥ (prePlaceFunctor (Constant Cᵥ Cᵥ PrePlaceᵥ) refl)
 
+
+open import Cubical.Categories.Limits.Terminal
+
+record Reality02 {o h : Level}
+    (Cᵥ : Category o h)
+    (Cₘ : Category o h)
+    (PFₘᵥ : Profunctor⊶ o h Cₘ Cᵥ)
+    (CFₘ : Functor Cₘ Cₘ)
+    (Uᵥ : Category.ob Cᵥ)
+    (Pₘ : Category.ob Cₘ) :  
+  Type (lsuc (o ⊔ h)) where
+
+  open Category Cₘ renaming (ob to obₘ; id to idₘ; _∘_ to _∘ₘ_)
+
+  field
+    reality01 : Reality01 Cᵥ Cₘ PFₘᵥ CFₘ Uᵥ Pₘ
+
+    terminalₘ : Terminal Cₘ
+
+  open Reality01 reality01 public
+
+  1ₘ : obₘ
+  1ₘ = terminalOb Cₘ terminalₘ
+  
+  PreInteractionₘ : obₘ
+  PreInteractionₘ = PreThingsₘ 
+
+  field 
+
+    isGlobalPreInteractionₘ : Homₘ[ 1ₘ , PreThingsₘ ] → Property 
+
+  _⋙ₘ_ : ∀ {Z Y X : obₘ} → Homₘ[ Z , Y ] → Homₘ[ Y , X ] → Homₘ[ Z , X ]
+  f ⋙ₘ g = g ∘ₘ f
+
+  infixl 8 _⋙ₘ_
+
+  preThingCollectionIsPreInteractionPreservation : Property
+  preThingCollectionIsPreInteractionPreservation =
+    ∀ (universeTransitionᵥ : Homᵥ[ Uᵥ , Uᵥ ]) 
+      (globalPreThingsₘ : Homₘ[ 1ₘ , PreThingsₘ ])
+    → let 
+        preThingsTransitionₘ =
+          transport
+            (λ i → Homₘ[ PreThingsᵥₘ≡PreThingsₘ i , PreThingsᵥₘ≡PreThingsₘ i ])
+            (preThingsFunctorᵥₘ ⟪ universeTransitionᵥ ⟫)
+      in 
+        isGlobalPreInteractionₘ globalPreThingsₘ 
+        → isGlobalPreInteractionₘ (globalPreThingsₘ ⋙ₘ preThingsTransitionₘ)
+
+
+-----------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------
 
     -- (CFᵥ : Functor Cᵥ Cᵥ) -- not needed yet
