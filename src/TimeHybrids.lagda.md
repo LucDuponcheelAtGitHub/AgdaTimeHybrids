@@ -586,11 +586,11 @@ record Reality03 {o h : Level}
 definitions of `Reality02` (in `Reality03` and later versions) by opening it `public` using
 `open Reality02 reality02 public`. 
 
-`nothingₘ` is a `field` decaration that can be used to access the `field` declarations and
+`nothingₘ` is a `field` declaration that can be used to access the `field` declarations and
 definitions of `Zero`.
 
-`toNothingTransitionₘ` defines the material transformation of pre-thing collections in terms
-of `nothingₘ`.
+`toNothingTransitionₘ` defines the material transformation of pre-thing collections to nothing,
+the empty material pre-thing collection, in terms of `nothingₘ`.
 
 ```agda
   field
