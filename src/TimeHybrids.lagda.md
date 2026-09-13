@@ -120,7 +120,7 @@ specific as (partial) concretions and (partial) `Cubical Agda` implementations r
 ## Leveraging existing `Cubical Agda` modules as much as possible
 
 We leverage standard libraries to keep `field` declarations and corresponding definitions
-`Cubical Agda` idiomatic.
+`Cubical Agda` idiomatic using
 
 - Categories from `Cubical.Categories.Category.Base`.
 
@@ -401,7 +401,7 @@ the following mathematical abstraction.
   order to state material universe entity properties in a pointfree way.
 
 Again we leverage standard libraries to keep `field` declarations and corresponding definitions
-`Cubical Agda` idiomatic.
+`Cubical Agda` idiomatic using
 
 - Terminals from `Cubical.Categories.Limits.Terminal`.
 
@@ -426,12 +426,12 @@ record Reality02 {o h : Level}
 
 ### `reality01` and `terminalₘ` `field` declarations
 
-`reality01` is a `field` that can be used to access the `field` declarations and definitions of
-`Reality01` (in `Reality02` and later versions) by opening it `public` using
+`reality01` is a `field` declaration that can be used to access the `field` declarations and
+definitions of `Reality01` (in `Reality02` and later versions) by opening it `public` using
 `open Reality01 reality01 public`. 
 
-`terminalₘ` is a `field` that can be used to access the `field` declarations and definitions of
-`Terminal`.
+`terminalₘ` is a `field` declaration that can be used to access the `field` declarations and
+definitions of `Terminal`.
 
 `1ₘ` is a convenient notation for the *terminal object* of the material universe. Note that I
 wrote "the" instead of "a". It is a well known fact that all terminal objects are equivalent.
@@ -492,21 +492,145 @@ The dichotomy respectation property is defined as below as
 `preThingCollectionIsPreInteractionPreservation`.
 
 Note, again, how naturally HoTT deals with defining pre-thing collection transition equality in
-terms of pre-thing collection equality. This time the encoding is less verbose.
+terms of pre-thing collection equality. This time the encoding is less verbose and we extracted
+it as a `preThingsTransitionᵥₘToPreThingsTransitionₘAt` definition for reusability reasons.
 
 ```agda
+  preThingsTransitionᵥₘToPreThingsTransitionₘAt :
+    Homᵥ[ Uᵥ , Uᵥ ] → Homₘ[ PreThingsₘ , PreThingsₘ ]
+  preThingsTransitionᵥₘToPreThingsTransitionₘAt =
+    λ universeTransitionᵥ →
+      let
+        preThingsTransitionᵥₘ = preThingsFunctorᵥₘ ⟪ universeTransitionᵥ ⟫
+      in 
+        transport
+          (λ i → Homₘ[ PreThingsᵥₘ≡PreThingsₘ i , PreThingsᵥₘ≡PreThingsₘ i ])
+          preThingsTransitionᵥₘ      
+
   preThingCollectionIsPreInteractionPreservation : Property
   preThingCollectionIsPreInteractionPreservation =
     ∀ (universeTransitionᵥ : Homᵥ[ Uᵥ , Uᵥ ]) 
       (globalPreThingsₘ : Homₘ[ 1ₘ , PreThingsₘ ])
     → let 
         preThingsTransitionₘ =
-          transport
-            (λ i → Homₘ[ PreThingsᵥₘ≡PreThingsₘ i , PreThingsᵥₘ≡PreThingsₘ i ])
-            (preThingsFunctorᵥₘ ⟪ universeTransitionᵥ ⟫)
+          preThingsTransitionᵥₘToPreThingsTransitionₘAt universeTransitionᵥ
       in 
         isGlobalPreInteractionₘ globalPreThingsₘ 
         → isGlobalPreInteractionₘ (globalPreThingsₘ ⋙ₘ preThingsTransitionₘ)
 ```
 
+## The `Reality03` specification
+
+The specification `record Reality03` builds upon the specification `record Reality02` adding
+the following mathematical abstraction.
+
+- **Zero**: A material universe category *natural transformation* from a functor to itself.
+
+Again we leverage standard libraries to keep `field` declarations and corresponding definitions
+`Cubical Agda` idiomatic using
+
+- Natural Transformations from `Cubical.Categories.NaturalTransformation.Base`.
+
+```agda
+open import Cubical.Categories.NaturalTransformation.Base
+
+open NatTrans
+```
+
+### `record Zero`
+
+This time we also need to introduce our first own generic library specification, `record Zero`,
+having a `field` declaration `ζ`, a natural transformation that comes with a `zero-absorption` law.
+
+```agda
+record Zero
+    {o h : Level}
+    (C : Category o h)
+    (F : Functor C C) :
+  Type (lsuc (ℓ-max o h)) where
+
+  open Category C
+
+  field
+    ζ : NatTrans F F
+
+  zero : (Z : Category.ob C) → C [ F ⟅ Z ⟆ , F ⟅ Z ⟆ ]
+  zero = N-ob ζ
+
+  field
+    zero-absorption :
+      ∀ {Z : Category.ob C}
+        (f : C [ F ⟅ Z ⟆ , F ⟅ Z ⟆ ])
+      → f ∘ zero Z ≡ zero Z
+
+open Zero {{...}} public
+```
+
+
+### `record Reality03`
+
+```agda
+record Reality03 {o h : Level}
+    (Cᵥ : Category o h)
+    (Cₘ : Category o h)
+    (PFₘᵥ : Profunctor⊶ o h Cₘ Cᵥ)
+    (CFₘ : Functor Cₘ Cₘ)
+    (Uᵥ : Category.ob Cᵥ)
+    (Pₘ : Category.ob Cₘ) :  
+  Type (lsuc (o ⊔ h)) where
+```
+
+### `reality02` and `nothingₘ` `field` declaration
+
+`reality02` is a `field` declaration that can be used to access the `field` declarations and
+definitions of `Reality02` (in `Reality03` and later versions) by opening it `public` using
+`open Reality02 reality02 public`. 
+
+`nothingₘ` is a `field` decaration that can be used to access the `field` declarations and
+definitions of `Zero`.
+
+`toNothingTransitionₘ` defines the material transformation of pre-thing collections in terms
+of `nothingₘ`.
+
+```agda
+  field
+    reality02 : Reality02 Cᵥ Cₘ PFₘᵥ CFₘ Uᵥ Pₘ
+
+  open Reality02 reality02 public
+ 
+  field
+    instance
+      nothingₘ : Zero Cₘ CFₘ
+
+  toNothingTransitionₘ : Homₘ[ PreThingsₘ , PreThingsₘ ]
+  toNothingTransitionₘ = N-ob (ζ ⦃ nothingₘ ⦄) PreThingₘ
+```
+
+## `NoEscapeFromToNothingTransitionₘ` and it's proof `noEscapeFromToNothingTransitionProofₘ`
+
+We are ready to formulate that no virtual universe transition, and corresponding material
+pre-thing collection transition can escape from a material pre-thing collection transition to
+nothing.
+
+The proof is simply a specialization of the general `zero-absorption` law.
+
+```agda
+  NoEscapeFromToNothingTransitionₘ : Property
+  NoEscapeFromToNothingTransitionₘ =
+    ∀ universeTransitionᵥ 
+    → let 
+        preThingsTransitionₘ =
+          preThingsTransitionᵥₘToPreThingsTransitionₘAt universeTransitionᵥ
+      in 
+        toNothingTransitionₘ ⋙ₘ preThingsTransitionₘ ≡ toNothingTransitionₘ
+
+  noEscapeFromToNothingTransitionProofₘ : NoEscapeFromToNothingTransitionₘ
+  noEscapeFromToNothingTransitionProofₘ =
+    λ universeTransitionᵥ →
+      let 
+        preThingsTransitionₘ =
+          preThingsTransitionᵥₘToPreThingsTransitionₘAt universeTransitionᵥ
+      in
+        zero-absorption preThingsTransitionₘ
+```
 

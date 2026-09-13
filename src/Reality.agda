@@ -140,21 +140,95 @@ record Reality02 {o h : Level}
 
   infixl 8 _⋙ₘ_
 
+  preThingsTransitionᵥₘToPreThingsTransitionₘAt :
+    Homᵥ[ Uᵥ , Uᵥ ] → Homₘ[ PreThingsₘ , PreThingsₘ ]
+  preThingsTransitionᵥₘToPreThingsTransitionₘAt =
+    λ universeTransitionᵥ →
+      let
+        preThingsTransitionᵥₘ = preThingsFunctorᵥₘ ⟪ universeTransitionᵥ ⟫
+      in 
+        transport
+          (λ i → Homₘ[ PreThingsᵥₘ≡PreThingsₘ i , PreThingsᵥₘ≡PreThingsₘ i ])
+          preThingsTransitionᵥₘ      
+
   preThingCollectionIsPreInteractionPreservation : Property
   preThingCollectionIsPreInteractionPreservation =
     ∀ (universeTransitionᵥ : Homᵥ[ Uᵥ , Uᵥ ]) 
       (globalPreThingsₘ : Homₘ[ 1ₘ , PreThingsₘ ])
     → let 
         preThingsTransitionₘ =
-          transport
-            (λ i → Homₘ[ PreThingsᵥₘ≡PreThingsₘ i , PreThingsᵥₘ≡PreThingsₘ i ])
-            (preThingsFunctorᵥₘ ⟪ universeTransitionᵥ ⟫)
+          preThingsTransitionᵥₘToPreThingsTransitionₘAt universeTransitionᵥ
       in 
         isGlobalPreInteractionₘ globalPreThingsₘ 
         → isGlobalPreInteractionₘ (globalPreThingsₘ ⋙ₘ preThingsTransitionₘ)
 
-
 -----------------------------------------------------------------------------------------------
+
+open import Cubical.Categories.NaturalTransformation.Base
+
+open NatTrans
+
+record Zero
+    {o h : Level}
+    (C : Category o h)
+    (F : Functor C C) :
+  Type (lsuc (ℓ-max o h)) where
+
+  open Category C -- renaming (_∘_ to _∘C_)
+
+  field
+    ζ : NatTrans F F
+
+  zero : (Z : Category.ob C) → C [ F ⟅ Z ⟆ , F ⟅ Z ⟆ ]
+  zero = N-ob ζ
+
+  field
+    zero-absorption :
+      ∀ {Z : Category.ob C}
+        (f : C [ F ⟅ Z ⟆ , F ⟅ Z ⟆ ])
+      → f ∘ zero Z ≡ zero Z
+
+open Zero {{...}} public
+
+record Reality03 {o h : Level}
+    (Cᵥ : Category o h)
+    (Cₘ : Category o h)
+    (PFₘᵥ : Profunctor⊶ o h Cₘ Cᵥ)
+    (CFₘ : Functor Cₘ Cₘ)
+    (Uᵥ : Category.ob Cᵥ)
+    (Pₘ : Category.ob Cₘ) :  
+  Type (lsuc (o ⊔ h)) where
+
+  field
+    reality02 : Reality02 Cᵥ Cₘ PFₘᵥ CFₘ Uᵥ Pₘ
+
+  open Reality02 reality02 public
+ 
+  field
+    instance
+      nothingₘ : Zero Cₘ CFₘ
+  
+  toNothingTransitionₘ : Homₘ[ PreThingsₘ , PreThingsₘ ]
+  toNothingTransitionₘ = N-ob (ζ ⦃ nothingₘ ⦄) PreThingₘ
+
+  NoEscapeFromToNothingTransitionₘ : Property
+  NoEscapeFromToNothingTransitionₘ =
+    ∀ universeTransitionᵥ
+    → let 
+        preThingsTransitionₘ =
+          preThingsTransitionᵥₘToPreThingsTransitionₘAt universeTransitionᵥ
+      in 
+        toNothingTransitionₘ ⋙ₘ preThingsTransitionₘ ≡ toNothingTransitionₘ
+
+  noEscapeFromToNothingTransitionProofₘ : NoEscapeFromToNothingTransitionₘ
+  noEscapeFromToNothingTransitionProofₘ =
+    λ universeTransitionᵥ →
+      let 
+        preThingsTransitionₘ =
+          preThingsTransitionᵥₘToPreThingsTransitionₘAt universeTransitionᵥ
+      in
+        zero-absorption preThingsTransitionₘ
+
 -----------------------------------------------------------------------------------------------
 
     -- (CFᵥ : Functor Cᵥ Cᵥ) -- not needed yet
