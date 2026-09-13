@@ -395,10 +395,10 @@ functor `Constant Cᵥ Cᵥ PrePlaceᵥ` that *definitionally* (using `refl` evi
 ## The `Reality02` specification
 
 The specification `record Reality02` builds upon the specification `record Reality01` adding
-the following mathematical abstractions.
+the following mathematical abstraction.
 
-- **Terminals**: The material universe, is now modeled as a category with *terminal* objects in
-  order to state material universe properties in a pointfree way.
+- **Terminals**: The material universe is now modeled as a category with *terminal* objects in
+  order to state material universe entity properties in a pointfree way.
 
 Again we leverage standard libraries to keep `field` declarations and corresponding definitions
 `Cubical Agda` idiomatic.
@@ -427,12 +427,13 @@ record Reality02 {o h : Level}
 ### `reality01` and `terminalₘ` `field` declarations
 
 `reality01` is a `field` that can be used to access the `field` declarations and definitions of
-`Reality01` by opening it using `open Reality01 reality01 public`. 
+`Reality01` (in `Reality02` and later versions) by opening it `public` using
+`open Reality01 reality01 public`. 
 
 `terminalₘ` is a `field` that can be used to access the `field` declarations and definitions of
 `Terminal`.
 
-`1ₘ` ia a convenient notation for the *terminal object* of the material universe. Note that I
+`1ₘ` is a convenient notation for the *terminal object* of the material universe. Note that I
 wrote "the" instead of "a". It is a well known fact that all terminal objects are equivalent.
 
 ```agda
@@ -464,8 +465,8 @@ used "pre-things" as the plural of pre-thing.
 
 Not all pre-thing collections are pre-thing collections of interacting pre-things. We declare
 `field` `isGlobalPreInteractionₘ` , a property to make the distinction. It is formulated in
-terms of global values (elements), a commmon name for values (elements) of type
-`Homₘ[ 1ₘ , Z ]` for some `Z` (in this case `PreThingsₘ`).
+terms of global values (elements), a common name for values (elements) of type `Homₘ[ 1ₘ , Z ]`
+for some `Z` (in this case `PreThingsₘ`).
 
 ```agda
   field 
