@@ -614,6 +614,11 @@ Equality evidences and equivalence evidences can be defined in terms of each oth
 
 ## The `Reality05` specification
 
+The specification `record Reality05` adds the following mathematical abstraction.
+
+- **Choices**: A material universe category *natural transformation* from a functor composed
+with itself to to that functor composed with itself.
+
 The specification `record Reality05` formalizes a pre-thing collection pre-interaction being
 equal to the pre-interaction of the union, defined using the multiplication `μ` of a monad
 structure on `CollFunctₘ`, of all choices of pre-things on the pre-thing collections of the
