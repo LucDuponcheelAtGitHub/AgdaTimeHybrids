@@ -8,8 +8,8 @@ others he wrote the book *Virtual topology and Functor geometry* that contribute
 underlying mathematical abstraction of his *Time Hybrids: A New Generic Theory of Reality*
 book.
 
-Frankly, my mathematical abstraction is not be fully in sync with Fred's mathematical
-abstraction in his *Virtual topology and Functor geometry* book.
+Frankly, my mathematical abstraction is not fully in sync with Fred's mathematical abstraction
+in his *Virtual topology and Functor geometry* book.
 
 My goal was to formalize the underlying mathematical abstraction of the basics of Fred's book
 *computationally* in a *pointfree* way.
@@ -27,11 +27,11 @@ I *model* Fred's *Theory of Reality* using the following mathematical abstractio
 - **Categories**: Both the *virtual universe* and the *material universe* are modeled as
   categories. A category comes with *objects* and *homomorphisms* between objects.
 
-- **Transitions**: *Dynamic evolution* is modeled as *transitions*, which are homomorphisms 
-  from objects to theirselves (also called *endomorphisms*).
+- **Transitions**: *Dynamic evolution* is modeled as *endomorphisms*, which are homomorphisms 
+  from objects to theirselves. We refer to them as *transitions*.
 
-- **Functors**: The dynamic evolution of *universe objects* — such as *virtual pre-places* and 
-  *material pre-thing collections* — is modeled using *functors* that map 
+- **Functors**: The dynamic evolution of *universe objects* — such as *virtual pre-places*
+  and *material pre-thing collections* — is modeled using *functors* that map 
   *virtual universe transitions* to *(virtual or material) universe object transitions*.
 
 - **Profunctors**: The inter-action between the virtual universe and the material universe is
@@ -54,24 +54,26 @@ rather than standard `Agda` or `Lean 4`, motivated by several computational prin
 
 - **Computational Path Equality**: In `Cubical Agda`, type equality is not structural
   inductive equality but *path equality* at abstract interval *dimensions* `I`, `J`, ... .
-  Under the hood, structural induction computes directly using `transport` at path intervals.
+  Under the hood, structural induction computes directly using `transp` / `transport` at path
+  intervals.
 
 - **Computational Univalence**: The *Univalence Principle* states that type equivalence
-  (`_≃_`) is equivalent to type path equality (`_≡_`). In `Cubical Agda`, univalence computes
-  natively via `ua` and `pathToEquiv`, allowing structural equivalences to be, well, equivalent
-  to path equalities without needing unproven `postulate`s. Type path equality lives at a
-  higher *type universe* level as type equivalence. Equivalence, `T₁ ≃ T₂`, looks *inside* the
-  types at their elements while Equality `T₁­ ≡ T₂` looks *from above*, treating the types as
-  elements of a higher (type) universe level.
+  (`_≃_`) is equivalent to type equality (`_≡_`). In `Cubical Agda`, univalence computes
+  natively via `ua` and `pathToEquiv` (which we rename to `equivToEqual` and `equalToEquiv`),
+  allowing structural equivalences to be, well, equivalent to path equalities without needing
+  unproven `postulate`s. Type equality lives at a higher *type universe level* than type
+  equivalence. Equivalence, `T₁ ≃ T₂`, looks *inside* the types at their elements.
+  Equality `T₁ ≡ T₂` looks *from above*, treating the types as elements of a higher type
+  universe level.
 
 Frankly, my choice for `Cubical Agda` is also motivated by *personal* preferences.
 `Cubical Agda` is an academic effort, while `Lean 4` is an established effort sponsored by
-important companies (you name them) and, as such, is also an industrial effort.  I know that
+important companies (you name them) and, as such, is also an industrial effort. I know that
 important results are achieved using `Lean 4`. I also know that Terence Tao recognizes
-that `Cubical Agda`, based upon Homotopy Type Theory (HoTT), has advantages compored to
+that `Cubical Agda`, based upon Homotopy Type Theory (HoTT), has advantages compared to
 `Lean 4`. 
 
-Below is some quote of Terence Tao.
+Below is a quote of Terence Tao.
 
 *My own work does not interact with HoTT, but there are other areas of mathematics for which 
 HOTT is a promising foundation. It isn't very well supported in `Lean 4` at the moment. My 
@@ -82,53 +84,63 @@ As far as I am concerned, the following is striking.
 
 - **Harmonizing Paths and Transitions**: Category theory provides transitions **at** which
   state evolves. Homotopy Type Theory (HoTT) provides paths **at** which equality is
-  structurally `transport`ed. In my formalization, these two concepts work in complete harmony.
-  For example, path equalities between types are transported to path equalities between
-  transition types. Note that I wrote *transitions at*, emphasising that, just as Fred, I
-  consider *continous* transitions to be *discrete* entities. Similarly, note that I wrote
-  *paths at*, emphasising that I consider *continuos* paths to be discrete entities. After all, 
-  under the hood, they correspond to structural induction which is discrete.
+  structurally `transp`orted. In my formalization, these two concepts work in complete harmony.
+  For example, equalities between types are transported to equalities between transition types.
+  Note that I wrote *transitions at*, emphasising that, just as Fred, I consider *continous*
+  transitions to be *discrete* entities. Similarly, note that I wrote *paths at*, emphasising
+  that I consider *continuos* paths to be discrete entities. After all, under the hood, they
+  correspond to structural induction which is discrete.
 
-### Why Profunctors matter
+### Naming conventions
+
+As far as naming conventions are concerned we use abbreviations for names of Time Hybrids
+independent concepts and full names for Time Hybrids dependent concepts.
+
+For example, see below, we use abbreviated `Trans` and `Coll` for transitions and collections
+respectively, and, see below, we use `PreThing` and `Potential` for pre-things and potentials
+respectively.
+
+I find adhering to naming conventions in a consistent way notoriously hard. Especially when
+comining domain specific dependent concepts with domain specific independent concepts.
+
+I'll try to do my best, but, please, suggest improvements.
+
+### Why Profunctors matter.
 
 Profunctors,
 see [nLab](https://ncatlab.org/nlab/show/profunctor)
 and their `Cubical Agda` specification
 see [Agda](https://github.com/agda/cubical/blob/master/Cubical/Categories/Profunctor/Base.agda)
 turned out to be the natural abstraction to *formally separate* virtual universe related
-concepts from material universe related concepts.
+entities from material universe related entities.
 
 It is perfectly possible to go for other abstractions, but, as far as I know, they rely on
 pre-places to belong to both the virtual universe and the material universe. As such they are,
-in my opinion, sub-optimal abstractions.
+in my humble opinion, sub-optimal abstractions.
 
 Note that the *formalization* of the abstractions imposed pre-places to belong to both the
 virtual universe and the material universe. I consider this as a formal "double-check" of
-type systems, as the one of `Cubical Agda`, to inform you abot the consequences of the
+*type systems*, as the one of `Cubical Agda`, to inform you about the consequences of the
 abstraction choice you have made.
 
 **All comments are welcome.**
 
 ## How the `Reality` abstraction is formalized incrementally
 
-I am a mathematician. As such I am interested in the most simple general abstractions that
+I am a mathematician. As such I am interested in the least complex general abstractions that
 enabled me to formalize concepts of Fred's book as `Cubical Agda` specifications. Of course,
 eventually, those abstractions and `Cubical Agda` specifications will become more complex.
 Moreover, eventually, those abstractions and `Cubical Agda` specifications will become more
 specific as (partial) concretions and (partial) `Cubical Agda` implementations respectively.
 
-## Leveraging existing `Cubical Agda` modules as much as possible
+## Introducing definitions and modules "by need"
 
-We leverage standard libraries to keep `field` declarations and corresponding definitions
-`Cubical Agda` idiomatic using
+We structure the specification by introducing standard libraries, definitions, and types
+**by need**—importing and declaring entities precisely at the point in the development where
+they are required.
 
-- Categories from `Cubical.Categories.Category.Base`.
-
-- Functors from `Cubical.Categories.Functor.Base`.
-
-- Profunctors from `Cubical.Categories.Profunctor.Base`.
-
-So we `import` them to start with.
+To begin with `Reality01`, we need primitive levels, cubical paths, categories, functors,
+constant functors, and profunctors:
 
 ```agda
 {-# OPTIONS --cubical --guardedness #-}
@@ -141,6 +153,7 @@ open import Cubical.Foundations.Prelude
 
 open import Cubical.Categories.Category.Base
 open import Cubical.Categories.Functor.Base
+open import Cubical.Categories.Functors.Constant
 open import Cubical.Categories.Profunctor.Base
 ```
 
@@ -151,399 +164,296 @@ The specification `record Reality01` brings together the *virtual universe*, the
 
 ### Parameters
 
-`record Reality01` is parameterized by parameters
+`record Reality01` is parameterized by:
 
-- `Cᵥ`: formalizing the *virtual universe category* with *virtual pre-places* (see later). The
-  virtualuniverse is dynamic using *virtual universe transitions* (see later). Virtual
-  pre-places are dynamic using *intra-functorially* corresponding 
-  *virtual pre-place transitions* (see later).
+- `Catᵥ`: the *virtual universe category*.
 
-- `Cₘ`: formalizing the *material universe category* with *material pre-thing collections*
-  (see later). Material pre-thing collections are dynamic using *inter-functorially*
-  corresponding *material pre-thing collection transitions* (see later).
+- `Uᵥ`: a designated virtual universe object (the *state* or *time* of the virtual universe).
 
-and a parameter
+- `Catₘ`: the *material universe category*.
 
-- `PFₘᵥ`: formalizing the inter-action between the virtual universe and the material universe.
+- `CollFunctₘ`: the *material collection functor*, formalizing material to-collection mappings.
 
-and a parameter:
+- `Profunctₘᵥ`: the *material-virtual profunctor*, formalizing the inter-action.
 
-- `CFₘ`: formalizing *to-collection mappings* in the material universe.
-
-and parameters:
-
-- `Uᵥ`: formalizing a unique designated virtual universe object that you can think of as the
-  *state* of the virtual universe or, maybe more spectacular, as the *time* of the virtual
-  universe. Virtual universe state/time transitions make the virtual universe dynamic. In
-  what follows they are simpl referred to as virtual universe transitions. Viewing virtual
-  universe dynamics as state changes focusses on the *consequence* of changes. Viewing virtual
-  universe dynamics as time changes focusses on the *cause* of changes. But, really, both views
-  are essentially equivalent.
-
-- `Pₘ`: formalizing designated material objects, called *potentials*, being non-existing
-*atomic pre-things* brewing what, eventually, may become *atomic existing things*.
-Pre-thing collections can then be seen as being non-existing *composite pre-things* brewing
-what, eventually, may become *composite existing things*.
-
-Note that there are some *(implicit) `Level` parameters* involved. `o` for objects and `h` for
-homomorphisms. They are necessary to avoid paradoxes that would occur when dealing with
-theories in a naive way. Also note that `Reality01` itself has `Type` level `lsuc (o ⊔ h)`.
-Reasoning about `Reality01` happens at a higher level.
+First also define a synonym `Propertyₕ` for `Type h`.
 
 ```agda
 record Reality01 {o h : Level}
-    (Cᵥ : Category o h)
-    (Cₘ : Category o h)
-    (PFₘᵥ : Profunctor⊶ o h Cₘ Cᵥ)
-    (CFₘ : Functor Cₘ Cₘ)
-    (Uᵥ : Category.ob Cᵥ)
-    (Pₘ : Category.ob Cₘ) :
+    (Catᵥ : Category o h)
+    (Uᵥ : Category.ob Catᵥ)
+    (Catₘ : Category o h)
+    (CollFunctₘ : Functor Catₘ Catₘ)
+    (Profunctₘᵥ : Profunctor⊶ o h Catₘ Catᵥ) :
   Type (lsuc (o ⊔ h)) where
+
+  Propertyₕ = Type h
 ```
 
-The code below defines some, notationally convenient, renamings and synonyms. Technically, the
-operation synonyms are introduced in order to be able to associate precedences with them.
+### Convenient renamings and transition synonyms
+
+We introduce notation for homomorphism-types and transition-types.
 
 ```agda
-  open Category Cᵥ renaming (ob to obᵥ; id to idᵥ; _∘_ to _∘ᵥ_)
-  open Category Cₘ renaming (ob to obₘ; id to idₘ; _∘_ to _∘ₘ_)
-  
+  open Category Catᵥ renaming (ob to obᵥ; _∘_ to _∘ᵥ_)
+  open Category Catₘ renaming (ob to obₘ; _∘_ to _∘ₘ_)
+
   Homᵥ[_,_] : obᵥ → obᵥ → Type h
-  Homᵥ[_,_] = Cᵥ [_,_]
+  Homᵥ[_,_] = Catᵥ [_,_]
 
   Homₘ[_,_] : obₘ → obₘ → Type h
-  Homₘ[_,_] = Cₘ [_,_]
+  Homₘ[_,_] = Catₘ [_,_]
 
-  open Profunctor⊶ PFₘᵥ
+  Transᵥ[_] : obᵥ → Type h
+  Transᵥ[ Z ] = Homᵥ[ Z , Z ]
 
-  Hetₘᵥ[_,_] : obₘ → obᵥ → Type h
-  Hetₘᵥ[_,_] = Het[_,_]
-
-  _ₗ∘_ : ∀ {Zₘ Yₘ : obₘ} {Xᵥ : obᵥ} → Homₘ[ Zₘ , Yₘ ] → Hetₘᵥ[ Yₘ , Xᵥ ] → Hetₘᵥ[ Zₘ , Xᵥ ]
-  _ₗ∘_ = _⋆L_
-
-  _∙ᵣ_ : ∀ {Zₘ : obₘ} {Yᵥ Xᵥ : obᵥ} → Hetₘᵥ[ Zₘ , Yᵥ ] → Homᵥ[ Yᵥ , Xᵥ ] → Hetₘᵥ[ Zₘ , Xᵥ ]
-  _∙ᵣ_ = _⋆R_
-
-  infixr 9 _ₗ∘_
-
-  infixl 8 _∙ᵣ_
+  Transₘ[_] : obₘ → Type h
+  Transₘ[ Z ] = Homₘ[ Z , Z ]
 ```
 
-### `Functor` `field` declarations
-
-- `prePlaceFunctorᵥ` formalizes mapping *virtual universe* transitions to *virtual pre-place*
-   transitions, making pre-places dynamic. Note that only one category is involved.
-
-- `preThingsFunctorᵥₘ` formalizes mapping *virtual universe* transitions to
-  *material pre-thing collection* transitions, making pre-thing collections dynamic. Note that
-  two categories are involved.
-
+We also define left-to-right composition operators.
 
 ```agda
-  field 
-    prePlaceFunctorᵥ : Functor Cᵥ Cᵥ
+  _⋙ᵥ_ : ∀ {Z Y X : obᵥ} → Homᵥ[ Z , Y ] → Homᵥ[ Y , X ] → Homᵥ[ Z , X ]
+  f ⋙ᵥ g = g ∘ᵥ f
 
-    preThingsFunctorᵥₘ : Functor Cᵥ Cₘ
-```
+  infixl 8 _⋙ᵥ_
 
-### Corresponding `obᵥ` and `obₘ` definitions
-
-- `PrePlaceᵥ` is the `ob` (object) level part of `prePlaceFunctorᵥ` at `Uᵥ`, formalizing
-  pre-places.
-
-- `PreThingsᵥₘ` is the `ob` (object) level part of `preThingsFunctorᵥₘ` at `Uᵥ`, formalizing
-  pre-thing collections.
-
-```agda
-  PrePlaceᵥ : obᵥ
-  PrePlaceᵥ = prePlaceFunctorᵥ ⟅ Uᵥ ⟆
-
-  PreThingsᵥₘ : obₘ
-  PreThingsᵥₘ = preThingsFunctorᵥₘ ⟅ Uᵥ ⟆
-```
-
-### `obₘ` `field` declaration
-
-- `PreThingₘ` formalizes material *pre-thing* objects. Recall that there are *atomic* and
-  *composite* pre-things. For now we just declare `PreThingₘ`, leaving a definition for later.
-
-```agda
-  field
-    PreThingₘ : obₘ
-```
-
-### Corresponding `obₘ` definition
-
-- `PreThingsₘ` declares material *pre-thing collection* objects. You may argue that such objects
-  have already been dealt with, being defined as `PreThingsᵥₘ`. The dynamic nature of pre-thing
-  collections as `PreThingsᵥₘ` has been defined in terms of `preThingsFunctorᵥₘ`. Also the
-  pre-place of a pre-thing collection will be been defined in terms of `preThingsFunctorᵥₘ`.
-  Luckily the Cubical Homotopy Type Theory, on which `Cubical Agda` is based, can deal with all
-  this and declare `PreThingsₘ` and `PreThingsᵥₘ` as equivalent, and, therefore, using
-  univalence, as equal at a higher type universe level.
-
-```agda
-  PreThingsₘ : obₘ
-  PreThingsₘ = CFₘ ⟅ PreThingₘ ⟆
-```
-
-### More `field` declarations
-
-- `PreThingsᵥₘ≡PreThingsₘ` declares the equality of the previous subsection.
-
-- `PreThingsₘ⊶PrePlaceᵥ` declares the *pre-thing collection pre-place* heteromorphism.
-
-```agda  
-  field
-    PreThingsᵥₘ≡PreThingsₘ : PreThingsᵥₘ ≡ PreThingsₘ
-
-    PreThingsₘ⊶PrePlaceᵥ : Hetₘᵥ[ PreThingsₘ , PrePlaceᵥ ]  
-```
-
-## Movement
-
-We are ready to characterize *movement of pre-thing collections* in a dynamic universe and
-corresponding universe pre-places setting. 
-
-### `PrePlaceFunctorᵥ`
-
-- `PrePlaceFunctorᵥ` specifies a virtual universe category functor `Fᵥ` that requires 
-   equality of `Fᵥ ⟅ Uᵥ ⟆` with `PrePlaceᵥ` at `ob` level.
-
-```agda
-  record PrePlaceFunctorᵥ : Type (o ⊔ h) where
-    constructor prePlaceFunctor
-    pattern
-    field
-      Fᵥ : Functor Cᵥ Cᵥ
-      Fᵥ⟅Uᵥ⟆≡PrePlaceᵥ : Fᵥ ⟅ Uᵥ ⟆ ≡ PrePlaceᵥ
-
-  open PrePlaceFunctorᵥ
-```
-
-### `isMovementAtUniverseTransitionᵥ`
-
-First we define a convenient local synonym `Property`. Note that the type universe level `h`
-has been declared as an implicit `Level` typed parameter of `Reality01`. So it is a property
-at homomorphism type universe level.
-
-`isMovementAtUniverseTransitionᵥ` characterizes movement functorially as a `PrePlaceFunctorᵥ`
-so that `movementTransitionᵥ`, defined in terms of it, equals `lhs` and `rhs` where
-
-- `lhs` is the result of the left action of pre-thing collection transitions upon pre-thing
-  collection pre-places
-  
-and 
-
-- `rhs` is the result of the right action of pre-place transitions upon pre-thing collection
-  pre-places
-
-by 
-
-- letting the movement transition right act upon `rhs`.
-
-```agda
-  Property = Type h
-
-  isMovementAtUniverseTransitionᵥ : PrePlaceFunctorᵥ → Homᵥ[ Uᵥ , Uᵥ ] → Property
-  isMovementAtUniverseTransitionᵥ (prePlaceFunctor Fᵥ Fᵥ⟅Uᵥ⟆≡PrePlaceᵥ) universeTransitionᵥ =
-    let 
-      prePlaceTransitionᵥ = prePlaceFunctorᵥ ⟪ universeTransitionᵥ ⟫  
-      preThingsTransitionᵥₘ = preThingsFunctorᵥₘ ⟪ universeTransitionᵥ ⟫
-      preThingsTransitionₘ : Homₘ[ PreThingsᵥₘ≡PreThingsₘ i1 , PreThingsᵥₘ≡PreThingsₘ i1 ]
-      preThingsTransitionₘ =
-        transp 
-          (λ (i : I) → Homₘ[ PreThingsᵥₘ≡PreThingsₘ i , PreThingsᵥₘ≡PreThingsₘ i ])
-          i0
-          preThingsTransitionᵥₘ
-      movementTransitionᵥ : Homᵥ[ Fᵥ⟅Uᵥ⟆≡PrePlaceᵥ i1 , Fᵥ⟅Uᵥ⟆≡PrePlaceᵥ i1 ]
-      movementTransitionᵥ =
-        transp
-          (λ (i : I) → Homᵥ[ Fᵥ⟅Uᵥ⟆≡PrePlaceᵥ i , Fᵥ⟅Uᵥ⟆≡PrePlaceᵥ i ])
-          i0
-          (Fᵥ ⟪ universeTransitionᵥ ⟫)
-      lhs = preThingsTransitionₘ ₗ∘ PreThingsₘ⊶PrePlaceᵥ
-      rhs = PreThingsₘ⊶PrePlaceᵥ ∙ᵣ prePlaceTransitionᵥ
-    in 
-      lhs ∙ᵣ movementTransitionᵥ ≡ rhs
-```
-
-Note how naturally HoTT deals with defining
-
-- pre-thing collection transition equality in terms of pre-thing collection equality.
-
-and 
-
-- movement transitions in terms of `Fᵥ⟅Uᵥ⟆` and `PrePlaceᵥ` equality at the `ob` level.
-
-The encoding of `preThingsTransitionₘ` and `movementTransitionᵥ` is somewhat verbose. This has
-been done on purpose to make the formalization of the statements above more apparent.
-
-Characterizing *immobility* is now also easy and simple by using a *constant* virtual pre-place
-functor `Constant Cᵥ Cᵥ PrePlaceᵥ` that *definitionally* (using `refl` evidence), deals with
-`PrePlaceᵥ`s at the `ob` level. 
-
-```agda
-  open import Cubical.Categories.Functors.Constant
-
-  isImmobileAtUniverseTransitionᵥ : Homᵥ[ Uᵥ , Uᵥ ] → Property
-  isImmobileAtUniverseTransitionᵥ =
-    isMovementAtUniverseTransitionᵥ (prePlaceFunctor (Constant Cᵥ Cᵥ PrePlaceᵥ) refl)
-```
-
-## The `Reality02` specification
-
-The specification `record Reality02` builds upon the specification `record Reality01` adding
-the following mathematical abstraction.
-
-- **Terminals**: The material universe is now modeled as a category with *terminal* objects in
-  order to state material universe entity properties in a pointfree way.
-
-Again we leverage standard libraries to keep `field` declarations and corresponding definitions
-`Cubical Agda` idiomatic using
-
-- Terminals from `Cubical.Categories.Limits.Terminal`.
-
-```agda
-open import Cubical.Categories.Limits.Terminal
-```
-
-### `record Reality02`
-
-```agda
-record Reality02 {o h : Level}
-    (Cᵥ : Category o h)
-    (Cₘ : Category o h)
-    (PFₘᵥ : Profunctor⊶ o h Cₘ Cᵥ)
-    (CFₘ : Functor Cₘ Cₘ)
-    (Uᵥ : Category.ob Cᵥ)
-    (Pₘ : Category.ob Cₘ) :  
-  Type (lsuc (o ⊔ h)) where
-
-  open Category Cₘ renaming (ob to obₘ; id to idₘ; _∘_ to _∘ₘ_)
-```
-
-### `reality01` and `terminalₘ` `field` declarations
-
-`reality01` is a `field` declaration that can be used to access the `field` declarations and
-definitions of `Reality01` (in `Reality02` and later versions) by opening it `public` using
-`open Reality01 reality01 public`. 
-
-`terminalₘ` is a `field` declaration that can be used to access the `field` declarations and
-definitions of `Terminal`.
-
-`1ₘ` is a convenient notation for the *terminal object* of the material universe. Note that I
-wrote "the" instead of "a". It is a well known fact that all terminal objects are equivalent.
-
-```agda
-  field
-    reality01 : Reality01 Cᵥ Cₘ PFₘᵥ CFₘ Uᵥ Pₘ
-
-    terminalₘ : Terminal Cₘ
-
-  open Reality01 reality01 public
-
-  1ₘ : obₘ
-  1ₘ = terminalOb Cₘ terminalₘ
-```
-
-### `PreInteractionₘ` definition
-
-A *pre-interaction* is a pre-thing collection of interacting pre-things.
-
-Recall that I use the short name `PreThingsₘ` (appending an `s` to `PreThing`). I hope that
-this does not lead to any confusion. You may not have noticed, but, in the previous paragraph I
-used "pre-things" as the plural of pre-thing.
-
-```agda    
-  PreInteractionₘ : obₘ
-  PreInteractionₘ = PreThingsₘ 
-```
-
-### `isGlobalPreInteractionₘ` declaration
-
-Not all pre-thing collections are pre-thing collections of interacting pre-things. We declare
-`field` `isGlobalPreInteractionₘ` , a property to make the distinction. It is formulated in
-terms of global values (elements), a common name for values (elements) of type `Homₘ[ 1ₘ , Z ]`
-for some `Z` (in this case `PreThingsₘ`).
-
-```agda
-  field 
-
-    isGlobalPreInteractionₘ : Homₘ[ 1ₘ , PreThingsₘ ] → Property 
-```
-
-## `PreInteractionₘ` preservation
-
-We are ready to formulate that virtual universe transitions, and corresponding material
-pre-thing collection transitions respect the dichotomy between pre-interactions and other
-pre-thing collections. First we define left-to-right composition of material homomorphisms.
-Preferring to read from left to right is a matter of taste. 
-
-```agda
   _⋙ₘ_ : ∀ {Z Y X : obₘ} → Homₘ[ Z , Y ] → Homₘ[ Y , X ] → Homₘ[ Z , X ]
   f ⋙ₘ g = g ∘ₘ f
 
   infixl 8 _⋙ₘ_
 ```
 
-The dichotomy respectation property is defined as below as
-`preThingCollectionIsPreInteractionPreservation`.
+### Profunctor heteromorphisms and actions
 
-Note, again, how naturally HoTT deals with defining pre-thing collection transition equality in
-terms of pre-thing collection equality. This time the encoding is less verbose and we extracted
-it as a `preThingsTransitionᵥₘToPreThingsTransitionₘAt` definition for reusability reasons.
+We introduce notation for heteromomorphism-types.
 
 ```agda
-  preThingsTransitionᵥₘToPreThingsTransitionₘAt :
-    Homᵥ[ Uᵥ , Uᵥ ] → Homₘ[ PreThingsₘ , PreThingsₘ ]
-  preThingsTransitionᵥₘToPreThingsTransitionₘAt =
-    λ universeTransitionᵥ →
-      let
-        preThingsTransitionᵥₘ = preThingsFunctorᵥₘ ⟪ universeTransitionᵥ ⟫
-      in 
-        transport
-          (λ i → Homₘ[ PreThingsᵥₘ≡PreThingsₘ i , PreThingsᵥₘ≡PreThingsₘ i ])
-          preThingsTransitionᵥₘ      
+  open Profunctor⊶ Profunctₘᵥ
 
-  preThingCollectionIsPreInteractionPreservation : Property
-  preThingCollectionIsPreInteractionPreservation =
-    ∀ (universeTransitionᵥ : Homᵥ[ Uᵥ , Uᵥ ]) 
-      (globalPreThingsₘ : Homₘ[ 1ₘ , PreThingsₘ ])
-    → let 
-        preThingsTransitionₘ =
-          preThingsTransitionᵥₘToPreThingsTransitionₘAt universeTransitionᵥ
-      in 
-        isGlobalPreInteractionₘ globalPreThingsₘ 
-        → isGlobalPreInteractionₘ (globalPreThingsₘ ⋙ₘ preThingsTransitionₘ)
+  Hetₘᵥ[_,_] : obₘ → obᵥ → Type h
+  Hetₘᵥ[_,_] = Het[_,_]
 ```
+Heteromorphisms between material objects and virtual objects are equipped with left 
+contravariant actions upon them by material transitions and right covariant actions upon them
+by virtual transitions.
+
+```agda
+  _ₗ∘_ : ∀ {Zₘ Yₘ : obₘ} {Xᵥ : obᵥ} → Homₘ[ Zₘ , Yₘ ] → Hetₘᵥ[ Yₘ , Xᵥ ] → Hetₘᵥ[ Zₘ , Xᵥ ]
+  _ₗ∘_ = _⋆L_
+
+  infixl 9 _ₗ∘_
+
+  _∙ᵣ_ : ∀ {Zₘ : obₘ} {Yᵥ Xᵥ : obᵥ} → Hetₘᵥ[ Zₘ , Yᵥ ] → Homᵥ[ Yᵥ , Xᵥ ] → Hetₘᵥ[ Zₘ , Xᵥ ]
+  _∙ᵣ_ = _⋆R_
+
+  infixr 8 _∙ᵣ_
+```
+
+### Designated objects, pre-places and pre-thing collections, with their dynamic evolutions
+
+- `PrePlaceᵥ` is declared as an object `obᵥ`.
+
+- `prePlaceFunctor` is declared as a functor `Functor Catᵥ Catᵥ` mapping a virtual transition
+  to a pre-place transitions making pre-places dynamic.
+
+- `PreThingₘ` is declared as an `an object `obₘ`.
+
+- `Potentialₘ` is declared as an an object `obₘ`. representing atomic pre-things as declared by
+  `potentialAsAtomicPreThing`.
+
+- `PreThingCollₘ` is defined as `CollFunctₘ ⟅ PreThingₘ ⟆` representing composite pre-things as
+  declared by `preThingCollAsCompositePreThing`.
+
+- `preThingCollFunct` is declared as a functor `Functor Catᵥ Catₘ` mapping a virtual transition
+  to a pre-thing collection transition making pre-thing collections dynamic.
+
+- `preThingCollPrePlace` is declared as a heteromorphism 
+  `Hetₘᵥ[ PreThingCollₘ , PrePlaceᵥ ]` connecting a material pre-thing collection to a
+  virtual pre-place.
+
+`potentialAsAtomicPreThingFunctor` and `preThingCollAsCompositePreThing` declare pre-things to
+be compositional in a recursive way . Pre-things are either potentials, being atomic
+pre-things, or pre-thing collections, being composite pre-things. Frankly, for now we do not
+yet make use of this recursive compositionality, but we introduce it already anyway.
+
+```agda
+  field
+    PrePlaceᵥ : obᵥ
+
+    prePlaceFunctor : Functor Catᵥ Catᵥ
+    prePlaceFunctor⟅Uᵥ⟆≡PrePlaceᵥ : prePlaceFunctor ⟅ Uᵥ ⟆ ≡ PrePlaceᵥ
+
+    PreThingₘ : obₘ
+
+    Potentialₘ : obₘ
+
+    potentialAsAtomicPreThing : Homₘ[ Potentialₘ ,  PreThingₘ ]
+
+  PreThingCollₘ : obₘ
+  PreThingCollₘ = CollFunctₘ ⟅ PreThingₘ ⟆
+
+  field
+    preThingCollAsCompositePreThing : Homₘ[ PreThingCollₘ ,  PreThingₘ ]
+
+    preThingCollFunct : Functor Catᵥ Catₘ
+    preThingCollFunct⟅Uᵥ⟆≡PreThingCollₘ : preThingCollFunct ⟅ Uᵥ ⟆ ≡ PreThingCollₘ
+
+    preThingCollPrePlace : Hetₘᵥ[ PreThingCollₘ , PrePlaceᵥ ]
+```
+
+### Packaged pre-place functor
+
+Pre-place evolution is packaged into `PrePlaceFunctor`.
+
+```agda
+  record PrePlaceFunctor : Type (o ⊔ h) where
+    constructor ppf
+    pattern
+    field
+      functor : Functor Catᵥ Catᵥ
+      functor⟅Uᵥ⟆≡PrePlaceᵥ : functor ⟅ Uᵥ ⟆ ≡ PrePlaceᵥ
+
+  open PrePlaceFunctor
+```
+
+### Movement
+
+The property-valued operation `_isMovementAt_` defines a pre-place evolution to be a pre-thing
+collection movement under a universe transition.
+
+```agda
+  _isMovementAt_ : PrePlaceFunctor → Transᵥ[ Uᵥ ] → Propertyₕ
+  _isMovementAt_ (ppf functor functor⟅Uᵥ⟆≡PrePlaceᵥ) transᵥ[Uᵥ] =
+    let 
+      transᵥ[PrePlaceᵥ] : Transᵥ[ PrePlaceᵥ ]
+      transᵥ[PrePlaceᵥ] =
+        transport
+          (λ i → Transᵥ[ prePlaceFunctor⟅Uᵥ⟆≡PrePlaceᵥ i ])
+          (prePlaceFunctor ⟪ transᵥ[Uᵥ] ⟫)
+
+      transₘ[PreThingCollₘ] : Transₘ[ PreThingCollₘ ]
+      transₘ[PreThingCollₘ] =
+        transport
+          (λ i → Transₘ[ preThingCollFunct⟅Uᵥ⟆≡PreThingCollₘ i ])
+          (preThingCollFunct ⟪ transᵥ[Uᵥ] ⟫)
+
+      movement : Transᵥ[ PrePlaceᵥ ]
+      movement =
+        transport
+          (λ i → Transᵥ[ functor⟅Uᵥ⟆≡PrePlaceᵥ i ])
+          (functor ⟪ transᵥ[Uᵥ] ⟫)
+    in 
+        (transₘ[PreThingCollₘ] ₗ∘ preThingCollPrePlace) ∙ᵣ movement
+      ≡ preThingCollPrePlace ∙ᵣ transᵥ[PrePlaceᵥ]
+```
+
+Notice how HoTT naturally `transport`s object equality, `≡`, along an interval to define a
+transition at the end of the interval in terms of the transition at the start of the interval
+
+### Immobility as constant pre-place functor
+
+Immobility is defined by no movement, formalized as a constant pre-place functor.
+
+```agda
+  noMovementFunctor : PrePlaceFunctor
+  noMovementFunctor = ppf (Constant Catᵥ Catᵥ PrePlaceᵥ) refl
+
+  isImmobileAt : Transᵥ[ Uᵥ ] → Propertyₕ
+  isImmobileAt transᵥ[Uᵥ] = noMovementFunctor isMovementAt transᵥ[Uᵥ]
+```
+
+## The `Reality02` specification
+
+The specification `record Reality02` builds upon `record Reality01` adding
+the following mathematical abstraction.
+
+- **Terminals**: The material universe is now modeled as a category with *terminal* objects in
+  order to state material universe entity properties in a pointfree way.
+
+The specification `record Reality02` formalizes the preservation of a pre-thing collection
+being a pre-interaction regarding universe transitions.
+
+We import terminal limits to model global elements.
+
+`reality01` is a declaration that can be used to access the declarations and definitions of
+`Reality01` (in `Reality02` and later versions) by opening it `public` using
+`open Reality01 reality01 public`. 
+
+`terminalₘ` is a declaration that can be used to access the declarations and definitions of
+`Terminal`.
+
+We inherit by delegation.
+
+```agda
+open import Cubical.Categories.Limits.Terminal
+
+record Reality02 {o h : Level}
+    (Catᵥ : Category o h)
+    (Uᵥ : Category.ob Catᵥ)
+    (Catₘ : Category o h)
+    (CollFunctₘ : Functor Catₘ Catₘ)
+    (Profunctₘᵥ : Profunctor⊶ o h Catₘ Catᵥ) :
+  Type (lsuc (o ⊔ h)) where
+
+  open Category Catₘ renaming (ob to obₘ)
+
+  field
+    reality01 : Reality01 Catᵥ Uᵥ Catₘ CollFunctₘ Profunctₘᵥ
+
+  open Reality01 reality01 public
+  
+  field
+    terminalₘ : Terminal Catₘ
+
+  1ₘ : obₘ
+  1ₘ = terminalOb Catₘ terminalₘ
+  
+  PreInteractionₘ : obₘ
+  PreInteractionₘ = PreThingCollₘ 
+
+  field 
+    isPreInteraction : Homₘ[ 1ₘ , PreThingCollₘ ] → Propertyₕ 
+
+  PreInteractionPreservation : Propertyₕ
+  PreInteractionPreservation =
+    ∀ (transᵥ[Uᵥ] : Transᵥ[ Uᵥ ]) 
+      (homₘ[1ₘ,PreThingCollₘ] : Homₘ[ 1ₘ , PreThingCollₘ ])
+    → isPreInteraction 
+        homₘ[1ₘ,PreThingCollₘ] 
+      → isPreInteraction 
+          (homₘ[1ₘ,PreThingCollₘ] ⋙ₘ
+            transport
+              (λ i → Transₘ[ preThingCollFunct⟅Uᵥ⟆≡PreThingCollₘ i ])
+              (preThingCollFunct ⟪ transᵥ[Uᵥ] ⟫))
+```
+
+Notice that the property-valued function name `isPreInteraction`, although it names a 
+property valued function dealing with global elements, simply refers to the elements involved.
+
+We (try to) adhere to this naming simplification in a consistent way.
 
 ## The `Reality03` specification
 
-The specification `record Reality03` builds upon the specification `record Reality02` adding
-the following mathematical abstraction.
+The specification `record Reality03` adds the following mathematical abstraction.
 
-- **Zero**: A material universe category *natural transformation* from a functor to itself.
+- **Empty**: A material universe category *natural transformation* from a functor to itself.
 
-Again we leverage standard libraries to keep `field` declarations and corresponding definitions
-`Cubical Agda` idiomatic using
+The specification `record Reality03` formalizes the no escape from a to empty pre-thing 
+collection transition. 
 
-- Natural Transformations from `Cubical.Categories.NaturalTransformation.Base`.
+We import natural transformations.
+
+`N-ob` formalizes the object part of natural transformations, in this case natural
+transformation `ε`.
 
 ```agda
 open import Cubical.Categories.NaturalTransformation.Base
 
 open NatTrans
-```
 
-### `record Zero`
-
-This time we also need to introduce our first own generic library specification, `record Zero`,
-having a `field` declaration `ζ`, a natural transformation that comes with a `zero-absorption` law.
-
-```agda
-record Zero
+record Empty
     {o h : Level}
     (C : Category o h)
     (F : Functor C C) :
@@ -552,85 +462,212 @@ record Zero
   open Category C
 
   field
-    ζ : NatTrans F F
-
-  zero : (Z : Category.ob C) → C [ F ⟅ Z ⟆ , F ⟅ Z ⟆ ]
-  zero = N-ob ζ
+    ε : NatTrans F F
 
   field
-    zero-absorption :
+    emptyAbsorption :
       ∀ {Z : Category.ob C}
         (f : C [ F ⟅ Z ⟆ , F ⟅ Z ⟆ ])
-      → f ∘ zero Z ≡ zero Z
+      → f ∘ N-ob ε Z ≡ N-ob ε Z
 
-open Zero {{...}} public
-```
+open Empty {{...}} public
 
-
-### `record Reality03`
-
-```agda
 record Reality03 {o h : Level}
-    (Cᵥ : Category o h)
-    (Cₘ : Category o h)
-    (PFₘᵥ : Profunctor⊶ o h Cₘ Cᵥ)
-    (CFₘ : Functor Cₘ Cₘ)
-    (Uᵥ : Category.ob Cᵥ)
-    (Pₘ : Category.ob Cₘ) :  
+    (Catᵥ : Category o h)
+    (Uᵥ : Category.ob Catᵥ)
+    (Catₘ : Category o h)
+    (CollFunctₘ : Functor Catₘ Catₘ)
+    (Profunctₘᵥ : Profunctor⊶ o h Catₘ Catᵥ) :
   Type (lsuc (o ⊔ h)) where
-```
 
-### `reality02` and `nothingₘ` `field` declaration
-
-`reality02` is a `field` declaration that can be used to access the `field` declarations and
-definitions of `Reality02` (in `Reality03` and later versions) by opening it `public` using
-`open Reality02 reality02 public`. 
-
-`nothingₘ` is a `field` declaration that can be used to access the `field` declarations and
-definitions of `Zero`.
-
-`toNothingTransitionₘ` defines the material transformation of pre-thing collections to nothing,
-the empty material pre-thing collection, in terms of `nothingₘ`.
-
-```agda
   field
-    reality02 : Reality02 Cᵥ Cₘ PFₘᵥ CFₘ Uᵥ Pₘ
+    reality02 : Reality02 Catᵥ Uᵥ Catₘ CollFunctₘ Profunctₘᵥ
 
   open Reality02 reality02 public
  
   field
     instance
-      nothingₘ : Zero Cₘ CFₘ
+      emptyₘ : Empty Catₘ CollFunctₘ
 
-  toNothingTransitionₘ : Homₘ[ PreThingsₘ , PreThingsₘ ]
-  toNothingTransitionₘ = N-ob (ζ ⦃ nothingₘ ⦄) PreThingₘ
+  NoEscapeFromToEmptyPreThingCollTrans : Propertyₕ
+  NoEscapeFromToEmptyPreThingCollTrans =
+    ∀ transᵥ[Uᵥ] 
+    →   N-ob ε PreThingₘ ⋙ₘ 
+        transport
+          (λ i → Transₘ[ preThingCollFunct⟅Uᵥ⟆≡PreThingCollₘ i ])
+          (preThingCollFunct ⟪ transᵥ[Uᵥ] ⟫)
+      ≡ N-ob ε PreThingₘ
+
+  noEscapeFromToEmptyPreThingCollTransEvidence : NoEscapeFromToEmptyPreThingCollTrans
+  noEscapeFromToEmptyPreThingCollTransEvidence =
+    λ transᵥ[Uᵥ]
+    → emptyAbsorption (
+        transport
+          (λ i → Transₘ[ preThingCollFunct⟅Uᵥ⟆≡PreThingCollₘ i ])
+          (preThingCollFunct ⟪ transᵥ[Uᵥ] ⟫)
+      )
 ```
 
-## `NoEscapeFromToNothingTransitionₘ` and it's proof `noEscapeFromToNothingTransitionProofₘ`
+Notice that the specific evidence `noEscapeFromToEmptyPreThingCollTransEvidence` is an instance
+of the general law `emptyAbsorption`.
 
-We are ready to formulate that no virtual universe transition, and corresponding material
-pre-thing collection transition can escape from a material pre-thing collection transition to
-nothing.
+## The `Reality04` specification
 
-The proof is simply a specialization of the general `zero-absorption` law.
+The specification `record Reality04` formalizes a pre-thing singletons equality involving `η`,
+the unit of a monad structure on `CollFunctₘ`. 
+
+We import monads and type equivalences.
 
 ```agda
-  NoEscapeFromToNothingTransitionₘ : Property
-  NoEscapeFromToNothingTransitionₘ =
-    ∀ universeTransitionᵥ 
-    → let 
-        preThingsTransitionₘ =
-          preThingsTransitionᵥₘToPreThingsTransitionₘAt universeTransitionᵥ
-      in 
-        toNothingTransitionₘ ⋙ₘ preThingsTransitionₘ ≡ toNothingTransitionₘ
+open import Cubical.Categories.Monad.Base
 
-  noEscapeFromToNothingTransitionProofₘ : NoEscapeFromToNothingTransitionₘ
-  noEscapeFromToNothingTransitionProofₘ =
-    λ universeTransitionᵥ →
-      let 
-        preThingsTransitionₘ =
-          preThingsTransitionᵥₘToPreThingsTransitionₘAt universeTransitionᵥ
-      in
-        zero-absorption preThingsTransitionₘ
+open import Agda.Builtin.Cubical.Equiv
+
+open IsMonad
+
+record Reality04 {o h : Level}
+    (Catᵥ : Category o h)
+    (Uᵥ : Category.ob Catᵥ)
+    (Catₘ : Category o h)
+    (CollFunctₘ : Functor Catₘ Catₘ)
+    (Profunctₘᵥ : Profunctor⊶ o h Catₘ Catᵥ) :
+  Type (lsuc (o ⊔ h)) where
+
+  open Category Catₘ
+
+  field
+    reality03 : Reality03 Catᵥ Uᵥ Catₘ CollFunctₘ Profunctₘᵥ
+
+    instance
+      isMonadₘ : IsMonad CollFunctₘ
+
+  open Reality03 reality03 public
+
+  field
+    isPreThingSingleton : Homₘ[ 1ₘ , PreThingCollₘ ] → Propertyₕ
+
+  preThingSingletonEquation : Homₘ[ 1ₘ , PreThingCollₘ ] → Propertyₕ
+  preThingSingletonEquation homₘ[1ₘ,PreThingCollₘ] =
+      homₘ[1ₘ,PreThingCollₘ]
+    ≡     homₘ[1ₘ,PreThingCollₘ]
+      ⋙ₘ preThingCollAsCompositePreThing
+      ⋙ₘ N-ob (η isMonadₘ) PreThingₘ
+
+  PreThingSingletonEquivalence : Propertyₕ
+  PreThingSingletonEquivalence =
+    ∀ (homₘ[1ₘ,PreThingCollₘ] : Homₘ[ 1ₘ , PreThingCollₘ ])
+    →   isPreThingSingleton homₘ[1ₘ,PreThingCollₘ]
+      ≃ preThingSingletonEquation homₘ[1ₘ,PreThingCollₘ]
 ```
 
+## The `UnivalenceIllustration` specification
+
+Equality is equivalence at a higher property level.
+
+We import function composition and univalence (`ua` and `pathToEquiv`, renamed to 
+`equivToEqual` and `equalToEquiv`).
+
+```agda
+open import Cubical.Foundations.Function renaming (_∘_ to _∘ᶠ_)
+open import Cubical.Foundations.Univalence 
+  renaming (ua to equivToEqual; pathToEquiv to equalToEquiv)
+
+record UnivalenceIllustration {o h : Level}
+    (Catᵥ : Category o h)
+    (Uᵥ : Category.ob Catᵥ)
+    (Catₘ : Category o h)
+    (CollFunctₘ : Functor Catₘ Catₘ)
+    (Profunctₘᵥ : Profunctor⊶ o h Catₘ Catᵥ) :
+  Type (lsuc (o ⊔ h)) where
+
+  Propertyₕ₊₁ = Type (lsuc h)
+
+  field
+    reality04 : Reality04 Catᵥ Uᵥ Catₘ CollFunctₘ Profunctₘᵥ
+
+  open Reality04 reality04
+
+  PreThingSingletonEquality : Propertyₕ₊₁
+  PreThingSingletonEquality =
+    ∀ (homₘ[1ₘ,PreThingCollₘ] : Homₘ[ 1ₘ , PreThingCollₘ ])
+    →   isPreThingSingleton homₘ[1ₘ,PreThingCollₘ]
+      ≡ preThingSingletonEquation homₘ[1ₘ,PreThingCollₘ]
+```
+
+Equality evidences and equivalence evidences can be defined in terms of each other.
+
+```agda
+  field
+    preThingSingletonEquivalenceEvidence : PreThingSingletonEquivalence
+
+  PreThingSingletonEqualityEvidence' : PreThingSingletonEquality
+  PreThingSingletonEqualityEvidence' =
+    equivToEqual ∘ᶠ preThingSingletonEquivalenceEvidence
+
+  field
+    preThingSingletonEqualityEvidence : PreThingSingletonEquality
+
+  PreThingSingletonEquivalenceEvidence' : PreThingSingletonEquivalence
+  PreThingSingletonEquivalenceEvidence' =
+    equalToEquiv ∘ᶠ preThingSingletonEqualityEvidence
+```
+
+## The `Reality05` specification
+
+The specification `record Reality05` formalizes a pre-thing collection pre-interaction being
+equal to the pre-interaction of the union, defined using the multiplication `μ` of a monad
+structure on `CollFunctₘ`, of all choices of pre-things on the pre-thing collections of the
+pre-thing collection pre-interaction. 
+
+We import products (`_×_` from `Cubical.Data.Sigma`):
+
+```agda
+open import Cubical.Data.Sigma using (_×_)
+
+record Choices
+    {o m : Level}
+    (C : Category o m)
+    (F : Functor C C) :
+  Type (lsuc (ℓ-max o m)) where
+
+  field
+    χ : NatTrans (F ∘F F) (F ∘F F)
+
+open Choices {{...}} public
+
+record Reality05 {o h : Level}
+    (Catᵥ : Category o h)
+    (Uᵥ : Category.ob Catᵥ)
+    (Catₘ : Category o h)
+    (CollFunctₘ : Functor Catₘ Catₘ)
+    (Profunctₘᵥ : Profunctor⊶ o h Catₘ Catᵥ) :
+  Type (lsuc (o ⊔ h)) where
+
+  field
+    reality04 : Reality04 Catᵥ Uᵥ Catₘ CollFunctₘ Profunctₘᵥ
+
+  open Reality04 reality04 public
+
+  field
+    instance
+      choicesₘ : Choices Catₘ CollFunctₘ
+
+    preThingCollAsPreInteraction : Homₘ[ PreThingCollₘ , PreInteractionₘ ]
+
+  PreThingCollPreInteraction≡UnionOfChoicesPreInteraction : Propertyₕ
+  PreThingCollPreInteraction≡UnionOfChoicesPreInteraction =
+    ∀ homₘ[1ₘ,CFₘ⟅PreThingCollₘ⟆]
+    → let
+        homₘ[1ₘ,PreThingCollₘ] = 
+              homₘ[1ₘ,CFₘ⟅PreThingCollₘ⟆]
+          ⋙ₘ CollFunctₘ ⟪ preThingCollAsCompositePreThing ⟫
+        homₘ[1ₘ,PreThingCollₘ]' = 
+              homₘ[1ₘ,CFₘ⟅PreThingCollₘ⟆]
+          ⋙ₘ N-ob χ PreThingₘ
+          ⋙ₘ N-ob (μ isMonadₘ) PreThingₘ
+      in
+          isPreInteraction homₘ[1ₘ,PreThingCollₘ]
+        →   isPreInteraction homₘ[1ₘ,PreThingCollₘ]'
+          × (   (homₘ[1ₘ,PreThingCollₘ] ⋙ₘ preThingCollAsPreInteraction)
+              ≡ (homₘ[1ₘ,PreThingCollₘ]' ⋙ₘ preThingCollAsPreInteraction) )
+```
